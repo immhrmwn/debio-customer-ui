@@ -8,6 +8,8 @@ import searchIcon from "./search"
 import bellIcon from "./bell"
 import settingIcon from "./setting"
 import polkadotIcon from "./polkadot"
+import daiIcon from "./dai"
+import debioIcon from "./debio"
 import userIcon from "./user"
 import usersIcon from "./users"
 import labIllustration from "./labIllustration"
@@ -16,6 +18,12 @@ import eyeOffIcon from "./eyeOff"
 import logoutIcon from "./logout"
 import copyIcon from "./copy"
 import labIllustrationIcon from "./labIllustration"
+import customerIcon from "./customer"
+import labIcon from "./lab"
+import doctorIcon from "./doctor"
+import hospitalIcon from "./hospital"
+import checkCircleIcon from "./checkCircle"
+import lockIcon from "./lock"
 
 export {
   creditCardIcon,
@@ -27,6 +35,8 @@ export {
   bellIcon,
   settingIcon,
   polkadotIcon,
+  daiIcon,
+  debioIcon,
   eyeIcon,
   eyeOffIcon,
   userIcon,
@@ -35,5 +45,11 @@ export {
   logoutIcon,
   copyIcon,
   labIllustrationIcon,
-  defaultIcon
+  defaultIcon,
+  customerIcon,
+  labIcon,
+  doctorIcon,
+  hospitalIcon,
+  checkCircleIcon,
+  lockIcon,
 }

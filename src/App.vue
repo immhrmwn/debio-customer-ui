@@ -1,5 +1,6 @@
 <template lang="pug">
   div#app: v-app
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
     div(v-if="isLoadingSubstrateApi") Loading...
     router-view(v-else)
 </template>
@@ -34,7 +35,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "./common/styles/variables.scss";
+@import "@/common/styles/variables.scss";
 
 @media screen and (min-width: 1904px) {
   .container {

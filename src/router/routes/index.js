@@ -1,3 +1,6 @@
+import signInRoutes from './signIn'
+import generateAccountRoutes from './generateAccount'
+
 const indexRoutes = [{
     path: '/',
     component: () => import(/* webpackChunkName */ '../../views/LandingPage/Layout'),
@@ -5,11 +8,15 @@ const indexRoutes = [{
       {
         path: '/',
         name: 'landing-page',
-        meta: {
-          pageHeader: 'LandingPage',
-        },
         component: () => import(/* webpackChunkName */ '../../views/LandingPage'),
       },
+      {
+        path: '/select-role',
+        name: 'select-role',
+        component: () => import(/* webpackChunkName */ '../../views/LandingPage/SelectRole'),
+      },
+      ...generateAccountRoutes,
+      ...signInRoutes,
     ]
   },
 ]

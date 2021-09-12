@@ -16,9 +16,11 @@ export default new Vuetify({
     themes: {
       light: {
         primary: '#C400A5',
+        secondary: '#5640A5',
       },
       dark: {
         primary: '#C400A5',
+        secondary: '#5640A5',
       }
     }
   }
