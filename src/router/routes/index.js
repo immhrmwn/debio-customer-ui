@@ -1,5 +1,6 @@
 import signInRoutes from './signIn'
 import generateAccountRoutes from './generateAccount'
+import { checkIsLoggedIn } from '@/common/lib/route-guard'
 
 const indexRoutes = [{
     path: '/',
@@ -13,6 +14,7 @@ const indexRoutes = [{
       {
         path: '/select-role',
         name: 'select-role',
+        beforeEnter: checkIsLoggedIn,
         component: () => import(/* webpackChunkName */ '../../views/LandingPage/SelectRole'),
       },
       ...generateAccountRoutes,
@@ -21,4 +23,9 @@ const indexRoutes = [{
   },
 ]
   
-export default indexRoutes
+import customerRoutes from './customer'
+
+export {
+  indexRoutes,
+  customerRoutes,
+}

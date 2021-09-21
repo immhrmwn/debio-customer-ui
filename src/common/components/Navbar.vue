@@ -2,7 +2,7 @@
   .navbar(@mouseleave.prevent="handleHideDropdown(computeMouseLeave)")
     .navbar__wrapper
       .navbar__search-bar(@mouseenter.prevent="handleHideDropdown(computeMouseLeave)")
-        ui-debio-input(v-model="searchQuery" placeholder="Search..." width="443")
+        ui-debio-input(v-model="searchQuery" placeholder="Search..." width="350")
           ui-debio-icon(:icon="searchIcon" slot="icon-append" color="#000" stroke size="20")
 
       .navbar__user-menu(ref="menu" :class="{ 'navbar__user-menu--settings': !!getActiveMenu && getActiveMenu.type === 'settings' }")
@@ -98,6 +98,7 @@
 
               template(slot="footer" v-if="getActiveMenu.action")
                 v-btn.navbar__footer-button(block color="primary" outlined @click="handleDropdownAction(getActiveMenu.type)") {{ getActiveMenu.action }}
+    WalletBinding(:show='showMetamaskDialog')
 </template>
 
 <script>
@@ -115,8 +116,14 @@ import {
   copyIcon
 } from "@/common/icons"
 
+import WalletBinding from './WalletBinding.vue'
+
 export default {
   name: "Navbar",
+
+  components: {
+    WalletBinding,
+  },
 
   data: () => ({
     bellIcon,
@@ -130,11 +137,11 @@ export default {
     metamaskFoxIcon,
     searchIcon,
     copyIcon,
-
     searchQuery: "",
     contentHover: false,
     loginStatus: false,
     arrowPosition: "",
+    showMetamaskDialog: false,
     menus: [
       {
         id: 1,
@@ -219,8 +226,8 @@ export default {
     },
 
     connectToMetamask() {
+      this.showMetamaskDialog = true
       this.loginStatus = true
-      // TODO: Should handle connect to metamsk
     },
 
     disconnectWallet() {
