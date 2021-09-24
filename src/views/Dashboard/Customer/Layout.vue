@@ -1,6 +1,11 @@
 <template lang="pug">
   div.layout-dashboard
-    NavigationDrawer.layout-dashboard__sidebar
+    NavigationDrawer.layout-dashboard__sidebar(:items="computeNavs")
+      .footerDrawer
+        a.footerDrawer__link(href="#" target="_blank" style="text-decoration: none")
+          span Help and
+          span Documentation
+
     Navbar.layout-dashboard__navbar
     .layout-dashboard__main
       transition(name="transition-slide-x" mode="out-in")
@@ -12,7 +17,29 @@ import NavigationDrawer from "@/common/components/NavigationDrawer"
 import Navbar from "@/common/components/Navbar.vue"
 export default {
   name: "MainPage",
-  components: { NavigationDrawer, Navbar }
+  components: { NavigationDrawer, Navbar },
+
+  data: () => ({
+    navs: [
+      { text: "Dashboard", disabled: false, active: false, route: "customer-dashboard", img: "@/assets/grid.png" },
+      { text: "My Test", disabled: false, active: false, route: "customer-test", img: "@/assets/box.png" },
+      { text: "My EMR", disabled: false, active: false, route: "customer-emr", img: "@/assets/file-text.png" },
+      { text: "Order History", disabled: false, active: false, route: "customer-order-history", img: "@/assets/credit-card.png" }
+    ]
+  }),
+
+  computed: {
+    computeNavs() {
+      const setActive = name => {
+        return (
+          this.$route.name === name ||
+          this.$route.meta.parent === name
+        )
+      }
+
+      return this.navs.map(nav => ({ ...nav, active: setActive(nav.route) }))
+    }
+  }
 }
 </script>
 
