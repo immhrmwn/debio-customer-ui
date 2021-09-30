@@ -18,11 +18,11 @@ module.exports = {
       "double",
       { avoidEscape: true, allowTemplateLiterals: true }
     ],
-    "new-cap": ["error", { newIsCap: false }],
     semi: ["error", "never"],
     "arrow-spacing": "error",
     "comma-dangle": ["error", "never"],
     "indent": ["error", 2],
+    "new-cap": 0,
     camelcase: [
       "error",
       { properties: "never", ignoreDestructuring: true }
