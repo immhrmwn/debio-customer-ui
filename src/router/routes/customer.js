@@ -11,6 +11,8 @@ const customerRoutes = [{
       meta: { pageHeader: "Home" },
       component: () => import(/* webpackChunkName */ "../../views/Dashboard/Customer/Home")
     },
+
+    // EMR
     {
       path: "emr",
       name: "customer-emr",
@@ -18,10 +20,24 @@ const customerRoutes = [{
       component: () => import(/* webpackChunkName */ "../../views/Dashboard/Customer/Home/Emr")
     },
     {
-      path: "create",
+      path: "emr/create",
       name: "customer-emr-create",
       meta: { pageHeader: "Emr Create", parent: "customer-emr" },
       component: () => import(/* webpackChunkName */ "../../views/Dashboard/Customer/Home/Emr/Create")
+    },
+
+    // PAYMENT HISTORY
+    {
+      path: "payment-history",
+      name: "customer-payment-history",
+      meta: { pageHeader: "Payment History" },
+      component: () => import(/* webpackChunkName */ "../../views/Dashboard/Customer/Home/Payment")
+    },
+    {
+      path: "payment-history/details",
+      name: "customer-payment-details",
+      meta: { pageHeader: "Payment Details", parent: "customer-payment-history" },
+      component: () => import(/* webpackChunkName */ "../../views/Dashboard/Customer/Home/Payment/Details")
     }
   ]
 }]
