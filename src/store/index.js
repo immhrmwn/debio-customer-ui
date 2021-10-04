@@ -1,12 +1,12 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import auth from './auth'
-import ethereum from './ethereum'
-import metamask from './metamask'
-import testRequest from './test-request'
-import substrate from './substrate'
-import lab from './lab'
-import wallet from './wallet'
+import Vue from "vue"
+import Vuex from "vuex"
+import auth from "./auth"
+import ethereum from "./ethereum"
+import metamask from "./metamask"
+import testRequest from "./test-request"
+import substrate from "./substrate"
+import lab from "./lab"
+import wallet from "./wallet"
 
 
 Vue.use(Vuex)
@@ -28,6 +28,6 @@ export default new Vuex.Store({
   },
   actions: {
   },
-  getters: {},
+  getters: {}
 })
 

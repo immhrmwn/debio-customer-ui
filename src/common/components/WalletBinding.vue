@@ -110,7 +110,7 @@ export default {
     ethAccount: null,
     accountList: [],
     inputPassword: false,
-    selectAccount: null,
+    selectAccount: null
   }),
 
   computed: {
@@ -124,13 +124,13 @@ export default {
       show() {
         if (!this.show) return
   
-        this.error = "";
-        this.loading = false;
-        this.putAccount = false;
-        this.putWallet = true;
-        this.inputPassword = false;
-        this.isLoading = false;
-      },
+        this.error = ""
+        this.loading = false
+        this.putAccount = false
+        this.putWallet = true
+        this.inputPassword = false
+        this.isLoading = false
+      }
     }
   },
 
