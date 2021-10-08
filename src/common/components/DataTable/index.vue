@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-card(class="degenics-datatable-card elevation-2 ma-15")
+  v-card(class="degenics-datatable-card elevation-0")
     slot(name="prepend")
 
     //- <!-- Data Table -->
@@ -7,7 +7,7 @@
       class="degenics-data-table"
       :headers="headers"
       :items="items"
-      :items-per-page="5"
+      :items-per-page="entriesPerPage"
       :search="dataTableSearchVal"
       :page.sync="page"
       :class="additionalClass"
@@ -27,25 +27,32 @@
         slot(:name="name" v-bind="item")
 
 
-    //- <!-- Custom Footer -->
-    template(v-slot:footer)
-      div(class="footer d-flex justify-space-between align-center flex-wrap")
-        div(
-          class="pagination-info"
-        ) Showing {{ from() }} to {{ to() }} of {{ total() }} entries
-        v-pagination(
-          v-model="page"
-          :length="pageCount"
-          :total-visible="10"
-          circle
-          color="secondary"
-        )
+      //- <!-- Custom Footer -->
+      template(v-slot:footer)
+        div(class="footer d-flex justify-space-between align-center flex-wrap")
+          div(
+            class="pagination-info"
+          ) Showing
+            EntrySelect(
+              :value="entriesPerPage"
+              @select="setEntriesPerPage"
+            )
+            div of {{ total() }} entries
+          v-pagination(
+            v-model="page"
+            :length="pageCount"
+            :total-visible="10"
+            color="secondary"
+          )
 
 </template>
 
 <script>
+import EntrySelect from "@/common/components/DataTable/EntrySelect"
+
 export default {
   name: "DataTable",
+  components: { EntrySelect },
   props: {
     headers: { type: [Object, Array]},
     items: { type: [Object, Array]},
@@ -60,14 +67,19 @@ export default {
   },
   data: () => ({
     page: 1,
-    pageCount: 0,
-    entriesPerPage: 10
+    // pageCount: 2,
+    entriesPerPage: 5
     
   }),
   methods: {
     clickedRow() {
       console.log("clicked")
     },
+
+    setEntriesPerPage(val) {
+      this.entriesPerPage = val
+    },
+
     computedLoadingText() {
       return this.loadingText ? this.loadingText : "Loading.. Please wait"
     },
@@ -82,21 +94,14 @@ export default {
      * Footer Helper functions
      */
     from() {
-      if (this.totalItemLength == 0) {
+      if (this.items.length == 0) {
         return 0
       }
       return this.entriesPerPage * (this.page - 1) + 1
     },
 
-    to() {
-      if (this.page * this.entriesPerPage > this.items.length) {
-        return this.items.length
-      }
-      return this.page * this.entriesPerPage
-    },
-
     total() {
-      return this.totalItemLength
+      return this.items.length
     }
     /** ----------------- */
   },
@@ -111,101 +116,97 @@ export default {
     },
     _customFilter() {
       return this.customFilter ? this.customFilter : this.defaultFilter
+    },
+    pageCount() {
+      return Math.ceil(this.items.length / this.entriesPerPage)
     }
 
   }
 }
 </script>
 
-<style lang="scss">
-@import '/src/styles/variables.scss';
+<style lang="sass">
+@import '/src/styles/variables.scss'
 
-.degenics-datatable-card {
-  border-radius: 8px !important;
-  overflow: hidden !important;
-  padding: 40px;
+.degenics-datatable-card 
+  border-radius: 8px !important
+  overflow: hidden !important
 
-  box-shadow: unset !important;
-  filter: drop-shadow(0px 7px 20px rgba(0, 0, 0, 0.07));
-}
 
-.degenics-data-table {
-  border-radius: 8px;
-  overflow: hidden;
-  margin-top: 24px;
 
-  /** BRI text-body */
-  font-size: 9px;
-  line-height: 18px;
-  letter-spacing: 0.1px;
-  /** */
+.degenics-data-table 
+  border-radius: 8px
+  overflow: hidden
+  margin-top: 24px
 
-  thead {
-    background-color: #f5f7f9 !important;
+  font-size: 9px
+  line-height: 18px
+  letter-spacing: 0.1px
 
-    th {
-      padding-top: 8px !important;
-      padding-bottom: 8px !important;
-      height: 29px !important;
-      /* white-space: nowrap; */
-      * {
-        color: black !important;
-        /** BRI text-body */
-        font-size: 9px;
-        line-height: 18px;
-        letter-spacing: 0.1px;
-        /** */
-      }
-      i.v-icon.notranslate.v-data-table-header__icon:not(:hover) {
-        opacity: 0.5;
-      }
-      &.active {
-        i.v-icon.notranslate.v-data-table-header__icon {
-          opacity: 1;
-        }
-      }
-    }
-  }
+  thead 
+    background-color: #f5f7f9 !important
 
-  tbody {
-    border-bottom: none !important;
-    td {
-      * {
-        height: 57.3px !important;
-      }
-    }
+    th 
+      padding-top: 8px !important
+      padding-bottom: 8px !important
+      height: 29px !important
 
-    tr {
-      * {
-        font-size: 9px !important;
-        border-bottom: #f5f7f9 !important;
-      }
-    }
-  }
+      * 
+        color: black !important
+        font-size: 9px
+        line-height: 18px
+        letter-spacing: 0.1px
+      
+      i.v-icon.notranslate.v-data-table-header__icon:not(:hover) 
+        opacity: 0.5
+      
+      &.active 
+        i.v-icon.notranslate.v-data-table-header__icon 
+          opacity: 1
+        
+      
+    
+  
 
-  .footer {
-    height: 72px;
+  tbody 
+    border-bottom: none !important
+    td 
+      * 
+        height: 57.3px
+      
+    
 
-    .pagination-info {
-      color: $color-text-secondary;
-    }
-    .v-pagination {
-      button {
-        font-size: 11px;
-        min-width: 24px;
-        height: 24px;
-        outline: none;
-        /* outline-color: $color-secondary; */
-        &:not(.v-pagination__item--active) {
-          background: $color-border;
-        }
-      }
-      li:first-child, li:last-child {
-        button {
-          width: 24px;
-        }
-      }
-    }
-  }
-}
+    tr 
+      * 
+        font-size: 9px !important
+        border-bottom: #f5f7f9 !important
+      
+    
+  
+
+  .footer 
+    height: 72px
+    border-top: #000000 solid 0.5px 
+    padding: 5px 0 0 0
+
+    .pagination-info 
+      color: $color-text-secondary
+      display: flex
+
+    
+    .v-pagination 
+      button 
+        font-size: 11px
+        min-width: 24px
+        height: 24px
+        outline: none
+        &:not(.v-pagination__item--active) 
+          background: $color-border
+
+
+      li:first-child, li:last-child 
+        button
+          width: 24px
+
+
 </style>
