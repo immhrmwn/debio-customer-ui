@@ -14,6 +14,8 @@ import alertIcon from "./alert"
 import userIcon from "./user"
 import usersIcon from "./users"
 import labIllustration from "./labIllustration"
+import researchIllustration from "./researchIllustration"
+import particleIllustration from "./particleIllustration"
 import eyeIcon from "./eye"
 import eyeOffIcon from "./eyeOff"
 import logoutIcon from "./logout"
@@ -49,6 +51,8 @@ export {
   usersIcon,
   fileTextIcon,
   labIllustration,
+  researchIllustration,
+  particleIllustration,
   logoutIcon,
   copyIcon,
   noteIllustration,

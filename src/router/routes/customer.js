@@ -2,32 +2,32 @@ import { checkIsLoggedIn } from "@/common/lib/route-guard"
 
 const customerRoutes = [{
   path: "/customer",
-  component: () => import(/* webpackChunkName */ "../../views/Dashboard/Customer/Layout"),
+  component: () => import(/* webpackChunkName */ "@/views/Dashboard/Customer/Layout"),
   beforeEnter: checkIsLoggedIn,
   children: [
     {
       path: "/",
       name: "customer-dashboard",
       meta: { pageHeader: "Home" },
-      component: () => import(/* webpackChunkName */ "../../views/Dashboard/Customer/Home")
+      component: () => import(/* webpackChunkName */ "@/views/Dashboard/Customer/Home")
     },
     {
       path: "emr",
       name: "customer-emr",
       meta: { pageHeader: "Emr" },
-      component: () => import(/* webpackChunkName */ "../../views/Dashboard/Customer/Home/Emr")
+      component: () => import(/* webpackChunkName */ "@/views/Dashboard/Customer/Home/Emr")
     },
     {
       path: "create",
       name: "customer-emr-create",
       meta: { pageHeader: "Emr Create", parent: "customer-emr" },
-      component: () => import(/* webpackChunkName */ "../../views/Dashboard/Customer/Home/Emr/Create")
+      component: () => import(/* webpackChunkName */ "@/views/Dashboard/Customer/Home/Emr/Create")
     },
     {
       path: "request-test",
       name: "customer-request-test",
       meta: { pageHeader: "Request Test"},
-      component: () => import(/* webpackChunkName */ "../../views/Dashboard/Customer/Home/RequestTest")
+      component: () => import(/* webpackChunkName */ "@/views/Dashboard/Customer/Home/RequestTest")
     },
     {
       path: "select-lab",
@@ -35,7 +35,7 @@ const customerRoutes = [{
       meta: {
         pageHeader: "Select Lab", parent: "customer-request-test"
       },
-      component: () => import(/* webpackChunkName */ "../../views/Dashboard/Customer/Home/RequestTest/SelectLab")
+      component: () => import(/* webpackChunkName */ "@/views/Dashboard/Customer/Home/RequestTest/SelectLab")
     },
     {
       path: "checkout",
@@ -43,7 +43,7 @@ const customerRoutes = [{
       meta: {
         pageHeader: "Checkout", parent: "customer-request-test"
       },
-      component: () => import(/* webpackChunkName */ "../../views/Dashboard/Customer/Home/RequestTest/RequestTestCheckout")
+      component: () => import(/* webpackChunkName */ "@/views/Dashboard/Customer/Home/RequestTest/RequestTestCheckout")
     },
     {
       path: "success",
@@ -51,7 +51,15 @@ const customerRoutes = [{
       meta: {
         pageHeader: "Success", parent: "customer-request-test"
       },
-      component: () => import(/* webpackChunkName */ "../../views/Dashboard/Customer/Home/RequestTest/Success")
+      component: () => import(/* webpackChunkName */ "@/views/Dashboard/Customer/Home/RequestTest/Success")
+    },
+
+    // Data Bounty
+    {
+      path: "data-bounty",
+      name: "customer-data-bounty",
+      meta: { pageHeader: "Data Bounty" },
+      component: () => import(/* webpackChunkName */ "@/views/Dashboard/Customer/Home/DataBounty")
     }
   ]
 }]

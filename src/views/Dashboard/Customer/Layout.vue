@@ -37,6 +37,7 @@ export default {
       { text: "Dashboard", disabled: false, active: false, route: "customer-dashboard", img: "@/assets/grid.png" },
       { text: "My Test", disabled: false, active: false, route: "customer-test", img: "@/assets/box.png" },
       { text: "My EMR", disabled: false, active: false, route: "customer-emr", img: "@/assets/file-text.png" },
+      { text: "Data Bounty", disabled: false, active: false, route: "customer-data-bounty", img: "@/assets/file-text.png" },
       { text: "Order History", disabled: false, active: false, route: "customer-order-history", img: "@/assets/credit-card.png" }
     ]
   }),
@@ -80,6 +81,7 @@ export default {
       padding: 1.25rem !important
       padding-right: 2.5rem !important
       grid-area: navbar
+      z-index: 100
 
     &__main
       padding: 1.25rem !important
