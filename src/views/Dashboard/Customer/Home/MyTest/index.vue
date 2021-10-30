@@ -73,33 +73,33 @@
 </template>
 
 <script>
-import { layersIcon, noteIllustration } from "@/common/icons"
-import StakingServiceTab from "./StakingServiceTab.vue"
-import DataTable from "@/common/components/DataTable"
-import Button from "@/common/components/Button"
-import { mapState } from "vuex"
+import { layersIcon, noteIllustration } from "@/common/icons";
+import StakingServiceTab from "./StakingServiceTab.vue";
+import DataTable from "@/common/components/DataTable";
+import Button from "@/common/components/Button";
+import { mapState } from "vuex";
 import {
   // searchOrder,
   ordersByCustomer,
-  getOrdersData
-} from "@/common/lib/polkadot-provider/query/orders"
-import { queryLabsById } from "@/common/lib/polkadot-provider/query/labs"
-import { queryServicesById } from "@/common/lib/polkadot-provider/query/services"
-import localStorage from "@/common/lib/local-storage"
-import dataTesting from "./dataTesting.json"
+  getOrdersData,
+} from "@/common/lib/polkadot-provider/query/orders";
+import { queryLabsById } from "@/common/lib/polkadot-provider/query/labs";
+import { queryServicesById } from "@/common/lib/polkadot-provider/query/services";
+import localStorage from "@/common/lib/local-storage";
+import dataTesting from "./dataTesting.json";
 
 export default {
   name: "MyTest",
 
-  components: { 
+  components: {
     StakingServiceTab,
     DataTable,
-    Button
+    Button,
   },
 
-  data: () => ({ 
-    layersIcon, 
-    noteIllustration, 
+  data: () => ({
+    layersIcon,
+    noteIllustration,
     cardBlock: false,
     documents: null,
     tabs: null,
@@ -118,35 +118,38 @@ export default {
         value: "actions",
         sortable: false,
         align: "center",
-        width: "5%"
-      }
-    ]
+        width: "5%",
+      },
+    ],
   }),
 
   mounted() {
     window.addEventListener("resize", () => {
-      if (window.innerWidth <= 959) this.cardBlock = true
-      else this.cardBlock = false
-    })
+      if (window.innerWidth <= 959) this.cardBlock = true;
+      else this.cardBlock = false;
+    });
+    this.onSearchInput();
   },
 
-  async created() {
-
-  },
+  async created() {},
 
   methods: {
     toRequestTest() {
-      this.$router.push({ name: "customer-request-test-select-lab"})
+      this.$router.push({ name: "customer-request-test-select-lab" });
     },
 
     async onSearchInput() {
-      this.orderHistory = dataTesting.data.map(result => ({
+      this.orderHistory = dataTesting.data.map((result) => ({
         ...result._source,
         id: result._id,
-        updated_at: new Date(parseInt(result._source.updated_at)).toLocaleDateString(),
-        created_at: new Date(parseInt(result._source.created_at)).toLocaleDateString(),
-        timestamp: parseInt(result._source.created_at)
-      }))
+        updated_at: new Date(
+          parseInt(result._source.updated_at)
+        ).toLocaleDateString(),
+        created_at: new Date(
+          parseInt(result._source.created_at)
+        ).toLocaleDateString(),
+        timestamp: parseInt(result._source.created_at),
+      }));
     },
 
     setStatusColor(status) {
@@ -155,9 +158,9 @@ export default {
         PAID: "#E27625",
         RESULTREADY: "#5640A5",
         REJECTED: "#9B1B37",
-        SUBMITEDASDATABOUNTY: "#5640A5"
-      })
-      return colors[status.toUpperCase()]
+        SUBMITEDASDATABOUNTY: "#5640A5",
+      });
+      return colors[status.toUpperCase()];
     },
 
     async getOrderHistory() {
@@ -190,8 +193,8 @@ export default {
           this.orderHistory.sort(
             (a, b) => parseInt(b.timestamp) - parseInt(a.timestamp)
           );
-          const status = localStorage.getLocalStorageByName("lastOrderStatus")
-          if (status) this.orderHistory[0].status = status
+          const status = localStorage.getLocalStorageByName("lastOrderStatus");
+          if (status) this.orderHistory[0].status = status;
         }
 
         this.isLoadingOrderHistory = false;
@@ -202,21 +205,21 @@ export default {
     },
 
     checkLastOrder() {
-      const status = localStorage.getLocalStorageByName("lastOrderStatus")
-      this.isProcessed = status ? status : null
+      const status = localStorage.getLocalStorageByName("lastOrderStatus");
+      this.isProcessed = status ? status : null;
     },
 
     goToDetail() {
-      console.log("detail")
+      console.log("detail");
     },
 
     goToStakeData() {
-      console.log("stake data")
+      console.log("stake data");
     },
 
     goToInstruction() {
-      console.log("insturction")
-    }
+      console.log("insturction");
+    },
   },
 
   computed: {
@@ -224,50 +227,49 @@ export default {
       walletBalance: (state) => state.substrate.walletBalance,
       api: (state) => state.substrate.api,
       wallet: (state) => state.substrate.wallet,
-      lastEventData: (state) => state.substrate.lastEventData
+      lastEventData: (state) => state.substrate.lastEventData,
     }),
 
     userAddress() {
-      return JSON.parse(localStorage.getKeystore()) ["Address"]
-    }
-  }
-}
+      return JSON.parse(localStorage.getKeystore())["Address"];
+    },
+  },
+};
 </script>
 
 <style lang="sass" scoped>
-  @import "@/common/styles/mixins.sass"
-  @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap')
+@import "@/common/styles/mixins.sass"
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap')
 
-  .customer-
-    font-family: 'Open Sans', sans-serif !important
-    &::v-deep
-      .banner__subtitle
-        max-width: 36.188rem !important
+.customer-
+  font-family: 'Open Sans', sans-serif !important
+  &::v-deep
+    .banner__subtitle
+      max-width: 36.188rem !important
 
-  .customer-my-test
-    width: 100%
-    height: 200px 
-    background: #FFFFFF
-    margin-top: 50px
+.customer-my-test
+  width: 100%
+  height: 200px
+  background: #FFFFFF
+  margin-top: 50px
 
-    &__tabs
-      padding: 3px
+  &__tabs
+    padding: 3px
 
-    &__table
-      padding: 10px
+  &__table
+    padding: 10px
 
-    &__actions
-      padding: 35px
-      display: flex
-      align-items: center
-      gap: 30px
-      margin: 5px
+  &__actions
+    padding: 35px
+    display: flex
+    align-items: center
+    gap: 30px
+    margin: 5px
 
-    &__status
-      color: #48A868
+  &__status
+    color: #48A868
 
-    &__title-detail
-      margin: 0 5px 0 0
-      border-radius: 5px
-
+  &__title-detail
+    margin: 0 5px 0 0
+    border-radius: 5px
 </style>
