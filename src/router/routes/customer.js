@@ -38,6 +38,15 @@ const customerRoutes = [{
       component: () => import(/* webpackChunkName */ "@/views/Dashboard/Customer/Home/MyTest")
     },
     {
+      path: "order-history-detail",
+      name: "order-history-detail",
+      meta: {
+        pageHeader: "Order History Detail",
+        parent: "customer-test"
+      },
+      component: () => import( /* webpackChunkName */ "@/views/Dashboard/Customer/Home/MyTest/OrderHistoryDetail")
+    },
+    {
       path: "request-test",
       name: "customer-request-test",
       meta: { pageHeader: "Request Test" },
