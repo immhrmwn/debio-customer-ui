@@ -11,7 +11,7 @@
           v-row
             v-col
               div.leftSection.box.fillColor
-                div.topRow.fillColor_II
+                div.topRow
                   div.topHead
                     span Lab Details
                   div.box
@@ -27,7 +27,7 @@
                       div.topContentWraper
                         span {{ myTest.lab_info.name }}
                         span {{ myTest.lab_info.address }}
-                div.middleRow.fillColor_II
+                div.middleRow
                   div.topHead
                     span Product Details
                   div.box
@@ -38,14 +38,13 @@
                         stroke
                         :stroke-width="0"
                         color="linear-gradient(180deg, #716CFF 0%, #B267FF 100%)"
-                        view-box="0 0 55 55"
+                        :view-box="selectedIcon == dnaIcon? '0 0 32 40' : '0 0 55 55'"
                       )
                       div.topContentWraper
                         span {{ myTest.service_info.name }}
                         span {{ myTest.service_info.description }}
                 div.bottomRow
                   span Specimen Number
-                  v-spacer
                   span {{ myTest.dna_sample_tracking_id }}
             v-col
               div.rightSection.box
@@ -59,30 +58,79 @@
                 div.statusSection
                   span.status {{ status['name'] }}
                   span.detail {{ status['detail'] }}
-                div.statusStepper
-                  v-stepper(alt-labels v-model="e1" flat)
-                    v-stepper-header
-                      v-stepper-step(step="" :complete="e1 > 1")
-                        small Registered
-                      v-divider
-                      v-stepper-step(step="" :complete="e1 > 2")
-                        small Received
-                      v-divider
-                      v-stepper-step(step="" :complete="e1 > 3")
-                        small Quality Control
-                      v-divider
-                      v-stepper-step(step="" :complete="e1 > 4")
-                        small Analyzed
-                      v-divider
-                      v-stepper-step(step="" :complete="e1 > 5")
-                        small Results Ready
+
+                .progress
+                  .step-indicator
+                    .step
+                      div(:class="[`step-icon`, e1>1 && `active`]")
+                        v-icon(v-if="e1>1").icon mdi-check
+                      small Registered
+                    .indicator-line
+                    .step
+                      div(:class="[`step-icon`, e1>2 && `active`]")
+                        v-icon(v-if="e1>2").icon mdi-check
+                      small Received
+                    .indicator-line
+                    .step
+                      div(:class="[`step-icon`, e1>3 && `active`, isRejected()]")
+                        v-icon(v-if="e1>3 && myTest.status === `Rejected`").icon mdi-close
+                        v-icon(v-else-if="e1>3").icon mdi-check
+                      small Quality Control
+                    div(:class="[`indicator-line`, isRejected()]")
+                    .step
+                      div(:class="[`step-icon`, e1>4 && `active`, isRejected(true)]")
+                        v-icon(v-if="e1>4").icon mdi-check
+                      small Analyzed
+                    div(:class="[`indicator-line`, isRejected()]")
+                    .step
+                      div(:class="[`step-icon`, e1>5 && `active`, isRejected(true)]")
+                        v-icon(v-if="e1>5").icon mdi-check
+                      small Results Ready
+
                 .button
                   v-btn(
+                    v-if="myTest.status === `Rejected`"
+                    @click="showDetail = true"
+                    color="primary"
+                    large
+                    width="100%"
+                  ) View Details
+                  v-btn(
+                    v-else
+                    @click="toViewResult"
                     color="primary"
                     large
                     width="100%"
                     :disabled="myTest.status !== `ResultReady`"
                   ) View Result
+
+                ui-debio-modal(
+                  title="Quality Control Issues"
+                  @onClose="showDetail = false"
+                  :ctaAction="closeModal"
+                  :show="showDetail"
+                  :show-title="true"
+                  :show-cta="true"
+                  ctaTitle="OK"
+                )
+                  .content
+                    ol
+                      li Your sample has been contaminated by other suspicious particle.
+                      li We decide to reject the sample, and refund your service fee amount.
+                      li Please make sure you follow the instruction carefully.
+                  .content-detail
+                    .border-bottom.ph15
+                      p Details:
+                    .border-bottom.mt10.ph15
+                      .flex
+                        p Service Price
+                        p {{ myTest.prices[0].value }} {{ myTest.currency.toUpperCase() }}
+                      .flex
+                        p Quality Control Price
+                        p {{ myTest.additional_prices[0].value }} {{ myTest.currency.toUpperCase() }}
+                    .mt10.ph15.flex
+                      p Amount to refund
+                      p {{ myTest.prices[0].value - myTest.additional_prices[0].value }} {{ myTest.currency.toUpperCase() }}
 </template>
 
 <script>
@@ -119,10 +167,10 @@ export default {
     wetworkBanner,
     resultReadyBanner,
     qualityControlBanner,
-    cardBlock: false,
     DnaSampleStatus: "Registered",
     banner: registeredBanner,
     selectedIcon: weightLifterIcon,
+    showDetail: false,
     e1: 1,
     status: {
       status: "",
@@ -172,16 +220,24 @@ export default {
     ]
   }),
   mounted() {
-    window.addEventListener("resize", () => {
-      if (window.innerWidth <= 959) this.cardBlock = true;
-      else this.cardBlock = false;
-    });
     this.myTest = this.$route.params;
     this.checkOrderDetail();
     this.iconSwitcher()
-    console.log(this.myTest);
   },
   methods: {
+    toViewResult() {
+      this.$router.push({ name: "test-result", params: {idOrder: this.myTest.id}})
+    },
+
+    isRejected(border) {
+      if (border) return this.myTest.status === "Rejected" && `border-error`
+      else return  this.myTest.status === "Rejected" && `error`
+    },
+
+    closeModal() {
+      this.showDetail = false
+    },
+
     iconSwitcher() {
       switch (this.myTest.service_info.name) {
       case "Covid-19 Testing":
@@ -232,6 +288,11 @@ export default {
         this.banner = resultReadyBanner;
         this.e1 = 6
         break;
+      case "Rejected":
+        this.status = this.orderDetail[0]
+        this.banner = registeredBanner;
+        this.e1 = 4
+        break;
       default:
         this.status = this.orderDetail[0]
         this.banner = registeredBanner;
@@ -264,8 +325,6 @@ export default {
     margin: 0px
   .fillColor
     height: 456px
-  .fillColor_II
-    height: 150px
   .bodyContent
     margin: 0 0 0 0
   .leftSection
@@ -314,20 +373,7 @@ export default {
     display: flex
     flex-direction: column
     background: linear-gradient(81.43deg, #6344D0 2.53%, #9D82FF 100%)
-  .statusStepper
-    margin-top: 16px
-    .v-stepper__step
-    .v-stepper--alt-labels .v-stepper__step
-      flex-direction: column-reverse
-    .v-stepper--alt-labels .v-stepper__step__step
-      margin-top: 11px
-      margin-bottom: 0
-    .v-stepper--alt-labels .v-stepper__header .v-divider
-      margin: 57px -67px 0
-    .theme--light.v-stepper .v-stepper__step:not(.v-stepper__step--active):not(.v-stepper__step--complete):not(.v-stepper__step--error) .v-stepper__step__step
-      background: none
-      border: 2px solid #c400a5
-      
+
   .statusSection
     display: flex
     flex-direction: column
@@ -342,5 +388,78 @@ export default {
       line-height: 16px
   
   .button
-    margin-top: 6px
+    margin-top: 13px
+
+  .progress
+    width: 100%
+    min-width: 100px
+    padding: 17px
+    margin-top: 50px
+  .step-indicator
+    display: flex
+    align-items: center
+    .step-icon
+      box-sizing: border-box
+      display: flex
+      align-items: center
+      justify-content: center
+      width: 20px
+      height: 20px
+      border: 1px solid #A868FF
+      border-radius: 50%
+      background: #FFF
+      .icon
+        font-size: 10px
+        color: #ffffff
+        font-weight: 500
+
+    .active
+      background: linear-gradient(225deg, #D665FF 0%, #4C6FFF 100%)
+      border: none
+    .error
+      background: red
+    .border-error
+      border: 1px solid red
+
+  .step
+    display: flex
+    align-items: center
+    flex-direction: column
+    z-index: 1
+    position: relative
+    small
+      position: absolute
+      text-align: center
+      font-size: 10px
+      top: -30px
+      color: #595959
+      font-weight: 600
+      width: 75px
+  .indicator-line
+    width: 100%
+    height: 1px
+    background: #A868FF
+    flex: 1
+
+  .content
+    background: #F5F7F9
+    padding: 20px 15px
+    width: 338px
+    color: #595959
+    font-size: 14px
+  
+  .content-detail
+    text-align: left
+    width: 100%
+    font-size: 12px
+    font-weight: 600
+  .flex
+    display: flex
+    justify-content: space-between
+  .border-bottom
+    border-bottom: 0.5px solid #D3C9D1
+  .ph15
+    padding: 0px 15px
+  .mt10
+    margin-top: 10px
 </style>
