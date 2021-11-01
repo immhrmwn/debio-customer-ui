@@ -78,9 +78,6 @@ import StakingServiceTab from "./StakingServiceTab.vue"
 import DataTable from "@/common/components/DataTable"
 import Button from "@/common/components/Button"
 import { mapState } from "vuex"
-import { ordersByCustomer, getOrdersData } from "@/common/lib/polkadot-provider/query/orders"
-import { queryLabsById } from "@/common/lib/polkadot-provider/query/labs"
-import { queryServicesById } from "@/common/lib/polkadot-provider/query/services"
 import localStorage from "@/common/lib/local-storage"
 import dataTesting from "./dataTesting.json"
 
@@ -149,43 +146,6 @@ export default {
         SUBMITEDASDATABOUNTY: "#5640A5"
       })
       return { color: colors[status.toUpperCase()] }
-    },
-
-    async getOrderHistory() {
-      this.isLoadingOrderHistory = true;
-      try {
-        this.orderHistory = [];
-        const address = this.wallet.address;
-        const listOrderId = await ordersByCustomer(this.api, address);
-        var lengthMax = 3;
-        if (listOrderId != null) {
-          listOrderId.reverse();
-          if (listOrderId.length < lengthMax) {
-            lengthMax = listOrderId.length;
-          }
-          for (let i = 0; i < lengthMax; i++) {
-            const detailOrder = await getOrdersData(this.api, listOrderId[i]);
-            const detaillab = await queryLabsById(
-              this.api,
-              detailOrder.seller_id
-            );
-            const detailService = await queryServicesById(
-              this.api,
-              detailOrder.service_id
-            );
-            this.prepareOrderData(detailOrder, detaillab, detailService);
-          }
-          this.orderHistory.sort(
-            (a, b) => parseInt(b.timestamp) - parseInt(a.timestamp)
-          );
-          const status = localStorage.getLocalStorageByName("lastOrderStatus")
-          if (status) this.orderHistory[0].status = status
-        }
-        this.isLoadingOrderHistory = false;
-      } catch (err) {
-        console.log(err);
-        this.isLoadingOrderHistory = false;
-      }
     },
 
     checkLastOrder() {
