@@ -16,7 +16,13 @@
                     span Lab Details
                   div.box
                     div.topBody
+                      ui-debio-avatar.dataIcon.box(
+                        v-if="!!myTest.lab_info.profile_image"
+                        :src="myTest.lab_info.profile_image"
+                        :size="92"
+                      )
                       ui-debio-icon.dataIcon.box(
+                        v-else
                         :icon="microscopeIcon"
                         :size="92"
                         stroke
@@ -32,7 +38,13 @@
                     span Product Details
                   div.box
                     div.topBody
+                      ui-debio-avatar.dataIcon.box(
+                        v-if="!!myTest.service_info.image"
+                        :src="myTest.service_info.image"
+                        :size="92"
+                      )
                       ui-debio-icon.dataIcon.box(
+                        v-else
                         :icon="selectedIcon"
                         :size="92"
                         stroke
